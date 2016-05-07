@@ -83,6 +83,10 @@ class MessageBus::Rack::Middleware
     client_id = env['PATH_INFO'].split("/")[2]
     return [404, {}, ["not found"]] unless client_id
 
+    @bus.logger.info "="*100
+    @bus.logger.info "I didn't 404 in the middleware!"
+    @bus.logger.info "="*100
+
     user_id = @bus.user_id_lookup.call(env) if @bus.user_id_lookup
     group_ids = @bus.group_ids_lookup.call(env) if @bus.group_ids_lookup
     site_id = @bus.site_id_lookup.call(env) if @bus.site_id_lookup
