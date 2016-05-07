@@ -58,6 +58,9 @@ class MessageBus::Rack::Middleware
   end
 
   def call(env)
+    @bus.logger.info "="*100
+    @bus.logger.info env['PATH_INFO']
+    @bus.logger.info "="*100
 
     return @app.call(env) unless env['PATH_INFO'] =~ /^\/message-bus\//
 
@@ -72,6 +75,10 @@ class MessageBus::Rack::Middleware
       diags = MessageBus::Rack::Diagnostics.new(@app, message_bus: @bus)
       return diags.call(env)
     end
+
+    @bus.logger.info "="*100
+    @bus.logger.info "am I going to 404?"
+    @bus.logger.info "="*100
 
     client_id = env['PATH_INFO'].split("/")[2]
     return [404, {}, ["not found"]] unless client_id
